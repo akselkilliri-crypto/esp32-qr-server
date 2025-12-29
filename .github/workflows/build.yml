@@ -14,13 +14,13 @@ jobs:
       - name: Build firmware
         run: pio run
 
-      - name: Rename firmware.bin to qr_server.bin
+      - name: Rename firmware.bin to hello_world.bin
         run: |
           cd .pio/build/nodemcu-32s
-          mv firmware.bin qr_server.bin
+          mv firmware.bin hello_world.bin
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: qr-server-bin
-          path: .pio/build/nodemcu-32s/qr_server.bin
+          name: hello-world-bin
+          path: .pio/build/nodemcu-32s/hello_world.bin
