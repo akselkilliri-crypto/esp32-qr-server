@@ -3,9 +3,9 @@
 #include <NimBLEServer.h>
 #include <qrcode.h>
 
-// OLED на GPIO21 (SDA) и GPIO22 (SCL) — аппаратный I2C
+// Правильная инициализация GyverOLED для I2C (128x64, с буфером)
 #include <GyverOLED.h>
-GyverOLED<SSD1306_128x64, OLED_I2C_MODE> oled; // Использует стандартный I2C (21/22)
+GyverOLED<SSD1306_128x64> oled;  // Автоматически использует I2C на GPIO21/22
 
 #define SERVICE_UUID        "a2b3c4d5-e6f7-8901-2345-6789abcdef01"
 #define CHARACTERISTIC_UUID "b3c4d5e6-f7a8-9012-3456-789abcdef01"
@@ -57,20 +57,20 @@ void setup() {
     Serial.begin(115200);
     delay(1000);
     
-    // Инициализация OLED
+    // Инициализация OLED (автоматически на I2C: SDA=21, SCL=22)
     if (!oled.init()) {
         Serial.println("OLED init failed!");
         while (1) delay(10);
     }
     
-    // Показываем "Привет!" при старте
+    // Приветствие
     oled.clear();
     oled.setCursor(20, 25);
     oled.print("Привет!");
     oled.update();
-    delay(2000); // Показываем 2 секунды
+    delay(2000);
 
-    // Затем запускаем BLE-сервер
+    // BLE-сервер
     NimBLEDevice::init("ESP32 QR Server");
     NimBLEServer* server = NimBLEDevice::createServer();
     NimBLEService* service = server->createService(SERVICE_UUID);
